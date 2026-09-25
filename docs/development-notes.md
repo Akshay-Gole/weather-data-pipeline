@@ -53,8 +53,44 @@ Convert the hourly forecast lists into a list of dictionaries, with one dictiona
 
 ### Problem I solved
 - I learned how to combine three separate lists into individual hourly records. 
-I also learned that raising a ValueError stops the function immediately. The calling code can catch that error and display a clear message. 
+- I also learned that raising a ValueError stops the function immediately. The calling code can catch that error and display a clear message. 
 
 ### Next step
 
 Validate timestamps, temperatures and humidity values, remove duplicate timestamps, and sort the valid records.
+
+## Step 3: Validating, cleaning and saving weather records
+
+### Goal
+
+Validate hourly weather records, remove duplicates, sort valid records by timestamp and save them to a CSV file.
+
+### What I did
+
+- Created helper functions to validate timestamps, temperatures and humidity values.
+- Used datetime.strptime() to check timestamps against %Y-%m-%dT%H:%M. 
+- Checked that temperatures were not missing and were numeric. 
+- Checked that humidity values were numeric and between 0 and 100. 
+- Created clean_records(records) to separate kept, rejected and duplicate records. 
+- Used a set to track accepted timestamps and keep the first valid record for each timestamp. 
+- Sorted the kept records chronologically. 
+- Applied the cleaning function to the actual API records and printed the three counts. 
+- Created create_record_csv() using csv.DictWriter. 
+- Saved the kept records to cleaned_weather.csv with a header row.
+
+### Why I did it
+- Invalid values could produce incorrect daily summaries. 
+- Duplicate records could give some hours extra weight when calculating averages. 
+- Validating before checking duplicates prevents an invalid record from blocking a later valid record with the same timestamp. 
+- Sorting makes the cleaned data easier to inspect and use. 
+- CSV provides a table format that can be opened in spreadsheet applications or loaded into a database later. 
+- Keeping CSV writing in a separate function allows me to reuse it for daily summaries.
+
+### Problem I solved
+
+- I combined validation, duplicate removal and sorting into a cleaning function, then saved its valid output as a CSV file.
+
+- I also kept rejected and duplicate records separately so I can inspect them and understand what was removed.
+
+### Next step
+Group the cleaned records by date, calculate daily statistics and save them to daily_summary.csv.
